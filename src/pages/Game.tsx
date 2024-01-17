@@ -38,8 +38,8 @@ export default function Game() {
 
   return (
     <main className='w-full h-screen bg-slate-800 text-white p-8 grid place-content-center'>
-      <section className='w-[740px]'>
-        <h1 className='text-4xl mb-5 font-bold text-center'>Tic tac toe</h1>
+      <section className='w-[740px] flex flex-col gap-8'>
+        <h1 className='text-4xl font-bold text-center'>Tic tac toe</h1>
 
         <ul className='mx-auto max-w-[330px] grid grid-cols-3 gap-4'>
           <GridGame
@@ -52,20 +52,26 @@ export default function Game() {
           />
         </ul>
 
+        {winner === 'no-winner' && (
+          <div className='flex justify-center'>
+            <h3>Turno de: {currentPlayer}</h3>
+          </div>
+        )}
+
         {winner !== 'no-winner' && winner !== 'tie' && (
-          <div className='mt-8'>
+          <div>
             <h3 className='text-center'>Ganador: {winner}</h3>
           </div>
         )}
 
         {winner === 'tie' && (
-          <div className='my-8'>
+          <div>
             <h3 className='text-center'>Empate</h3>
           </div>
         )}
 
         {playerHost && (
-          <div className='flex justify-center gap-4 my-8'>
+          <div className='flex justify-center gap-4'>
             <button onClick={handleDeleteGame} className=''>
               <span className='bg-red-500 px-8 py-4 rounded-full font-bold'>
                 Terminar juego

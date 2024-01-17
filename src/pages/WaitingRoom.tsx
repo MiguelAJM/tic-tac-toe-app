@@ -37,11 +37,12 @@ export default function WaitingRoom() {
 
   return (
     <section>
-      <h2 className='text-4xl text-white mb-4 text-center'>Triqui Game</h2>
+      <h2 className='text-4xl text-white text-center'>Triqui Game</h2>
 
-      <div className='text-white mb-5 text-center'>
-        <h2>Jugador 1: {game.player_one_name}</h2>
-        <h2>Jugador 2: {game.player_two_name}</h2>
+      <div className='flex justify-center gap-4 text-white my-5 text-center'>
+        <h2>{game.player_one_name}</h2>
+        <p>VS</p>
+        <h2>{game.player_two_name}</h2>
       </div>
 
       {playerHost && (
