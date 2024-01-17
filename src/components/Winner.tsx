@@ -3,7 +3,6 @@ import { Square } from './Square'
 
 interface WinnerType {
   winner: string
-  setBoard: (value: React.SetStateAction<any[]>) => void
   setTurn: (value: React.SetStateAction<string>) => void
   setWinner: (
     value: React.SetStateAction<{
@@ -14,12 +13,10 @@ interface WinnerType {
 
 export default function Winner({
   winner,
-  setBoard,
   setTurn,
   setWinner
 }: WinnerType) {
   const resetGame = () => {
-    setBoard(Array(9).fill(null))
     setTurn(TURNS.x)
     setWinner({ win: 'not-winner' })
   }

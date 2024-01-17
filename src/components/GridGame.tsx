@@ -1,53 +1,78 @@
+import { doc, updateDoc } from 'firebase/firestore'
 import { TURNS } from '../constats'
-import { checkEndGame } from '../logic/checkEndGame'
 import { Square } from './Square'
+import { db } from '../firebase/firebaseConfig'
+import { Player } from '../utils/hooks/useDataGame'
 import { checkWinner } from '../logic/checkWinner'
 import confetti from 'canvas-confetti'
+import { checkEndGame } from '../logic/checkEndGame'
 
 interface GridTypes {
-  board: any[]
-  turn: string
-  winner: { win: string }
-  setBoard: (value: React.SetStateAction<any[]>) => void
-  setTurn: (value: React.SetStateAction<string>) => void
-  setWinner: (
-    value: React.SetStateAction<{
-      win: string
-    }>
-  ) => void
+  board: any[] | undefined
+  currentTurn: string | undefined
+  currentPlayer: string | undefined
+  id: string | undefined
+  players: Player[]
+  winner: string | undefined
 }
 
 export default function GridGame({
   board,
-  turn,
-  winner,
-  setBoard,
-  setTurn,
-  setWinner
+  currentTurn,
+  currentPlayer,
+  id,
+  players,
+  winner
 }: GridTypes) {
-  const updateBoard = (index: number) => {
-    if (board[index] || winner.win !== 'not-winner') return
+  const userUID = window.localStorage.getItem('uuid')
+    ? JSON.parse(window.localStorage.getItem('uuid') as string)
+    : ''
 
-    const newBoard = [...board]
-    newBoard[index] = turn
-    setBoard(newBoard)
+  const updateBoard = async (index: number) => {
+    if (board && id) {
+      if (board[index] || winner !== 'no-winner') return
 
-    const newTurn = turn === TURNS.x ? TURNS.o : TURNS.x
-    setTurn(newTurn)
+      const newTurn = players.find((item) => item.turn === currentTurn)
+      
+      if (newTurn) {
+        if (newTurn.uid === userUID) {
+          currentTurn === TURNS.x
+            ? await updateDoc(doc(db, 'games', id), {
+                currentTurn: TURNS.o,
+                currentPlayer: players[1].player_name
+              })
+            : await updateDoc(doc(db, 'games', id), {
+                currentTurn: TURNS.x,
+                currentPlayer: players[0].player_name
+              })
 
-    const newWinner = checkWinner(newBoard)
-    const endGame = checkEndGame(newBoard)
+          const newBoard = [...board]
+          newBoard[index] = currentTurn
 
-    if (newWinner === TURNS.x || newWinner === TURNS.o) {
-      confetti()
-      return setWinner((prevState) => ({ ...prevState, win: newWinner }))
-    }
+          await updateDoc(doc(db, 'games', id), {
+            board: newBoard
+          })
 
-    if (endGame) {
-      return setWinner((prevState) => ({ ...prevState, win: 'tie-game' }))
+          const newWinner = checkWinner(newBoard)
+          const endGame = checkEndGame(newBoard)
+
+          if (newTurn.turn === newWinner) {
+            confetti()
+            return await updateDoc(doc(db, 'games', id), {
+              winner: currentPlayer
+            })
+          }
+
+          if (endGame) {
+            return await updateDoc(doc(db, 'games', id), {
+              winner: 'tie'
+            })
+          }
+        }
+      }
     }
   }
-  return board.map((square, index) => {
+  return board?.map((square, index) => {
     return (
       <Square key={index} index={index} updateBoard={() => updateBoard(index)}>
         {square}

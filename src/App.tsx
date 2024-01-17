@@ -1,44 +1,25 @@
-import { useState } from 'react'
-import { TURNS } from './constats'
-import GridGame from './components/GridGame'
-import Turn from './components/Turn'
-import Winner from './components/Winner'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Home from './pages/Home'
+import InviteGame from './pages/InviteGame'
+import WaitingRoom from './pages/WaitingRoom'
+import { Toaster } from 'sonner'
+import GamesProvider from './context/GamesProvider'
+import Game from './pages/Game'
 
 export default function App() {
-  const [board, setBoard] = useState(Array(9).fill(null))
-  const [turn, setTurn] = useState(TURNS.x)
-
-  const [winner, setWinner] = useState({
-    win: 'not-winner'
-  })
-
   return (
-    <main className='w-full h-screen bg-slate-800 p-8 grid place-content-center'>
-      <section className='w-[740px] mb-8'>
-        <h1 className='text-4xl mb-5 font-bold text-center text-white'>
-          Tic tac toe
-        </h1>
-
-        <ul className='mx-auto max-w-[330px] grid grid-cols-3 gap-4'>
-          <GridGame
-            board={board}
-            turn={turn}
-            winner={winner}
-            setBoard={setBoard}
-            setTurn={setTurn}
-            setWinner={setWinner}
-          />
-        </ul>
-      </section>
-
-      <Turn turn={turn} />
-
-      <Winner
-        winner={winner.win}
-        setBoard={setBoard}
-        setTurn={setTurn}
-        setWinner={setWinner}
-      />
-    </main>
+    <BrowserRouter>
+      <GamesProvider>
+        <Toaster position='top-center' richColors />
+        <main className='w-full h-screen bg-slate-800 p-8 grid place-content-center'>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/waiting-room/:id' element={<WaitingRoom />} />
+            <Route path='/game/invite/:id' element={<InviteGame />} />
+            <Route path='/game/:id' element={<Game />} />
+          </Routes>
+        </main>
+      </GamesProvider>
+    </BrowserRouter>
   )
 }
