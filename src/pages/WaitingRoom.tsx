@@ -69,7 +69,7 @@ export default function WaitingRoom() {
             </button>
           </CopyToClipboard>
 
-          <QRCode value={inviteLink} className='mx-auto my-8' />
+          <QRCode value={`https://${inviteLink}`} className='mx-auto my-8' />
         </>
       )}
 
