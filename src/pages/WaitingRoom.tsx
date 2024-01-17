@@ -67,6 +67,8 @@ export default function WaitingRoom() {
               Copiar link
             </button>
           </CopyToClipboard>
+
+          <QRCode value={inviteLink} className='mx-auto my-8' />
         </>
       )}
 
@@ -77,8 +79,6 @@ export default function WaitingRoom() {
           </h2>
         </div>
       )}
-
-      <QRCode value={inviteLink} className='mx-auto my-8' />
     </section>
   )
 }
