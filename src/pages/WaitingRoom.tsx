@@ -1,6 +1,7 @@
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import useDataGame from '../utils/hooks/useDataGame'
 import useWaitingRoom from '../utils/hooks/useWaitingRoom'
+import QRCode from 'react-qr-code'
 
 export default function WaitingRoom() {
   useWaitingRoom()
@@ -76,6 +77,8 @@ export default function WaitingRoom() {
           </h2>
         </div>
       )}
+
+      <QRCode value={inviteLink} className='mx-auto my-8' />
     </section>
   )
 }
