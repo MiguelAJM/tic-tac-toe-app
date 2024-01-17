@@ -63,7 +63,7 @@ export default function WaitingRoom() {
             Salirse de la partida
           </button>
 
-          <CopyToClipboard text={inviteLink}>
+          <CopyToClipboard text={`https://${inviteLink}`}>
             <button className='bg-blue-500 font-bold px-8 py-4 w-full rounded-full'>
               Copiar link
             </button>
