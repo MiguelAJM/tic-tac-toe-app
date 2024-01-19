@@ -1,10 +1,8 @@
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { QRCodeSVG } from 'qrcode.react'
 import useDataGame from '../utils/hooks/useDataGame'
-import useWaitingRoom from '../utils/hooks/useWaitingRoom'
-import QRCode from 'react-qr-code'
 
 export default function WaitingRoom() {
-  useWaitingRoom()
   const { status, players, playerHost, id, handleDeleteGame, handleStartGame } =
     useDataGame()
 
@@ -69,14 +67,21 @@ export default function WaitingRoom() {
             </button>
           </CopyToClipboard>
 
-          <QRCode value={`https://${inviteLink}`} className='mx-auto my-8' />
+          {!playerTwoOnline && (
+            <QRCodeSVG
+              value={`https://${inviteLink}`}
+              className='mx-auto my-8'
+            />
+          )}
         </>
       )}
 
       {!playerHost && (
         <div>
           <h2 className='text-white text-3xl'>
-            Esperando que inicie la partida...
+            Esperando que{' '}
+            <span className='text-lime-500'>{game.player_one_name}</span> inicie
+            la partida...
           </h2>
         </div>
       )}

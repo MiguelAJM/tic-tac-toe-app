@@ -1,6 +1,10 @@
-export const TURNS = {
-  x: 'x',
-  o: 'o'
+export const TURN = {
+  x: {
+    turn: 'x'
+  },
+  o: {
+    turn: 'o'
+  }
 }
 
 export const WIN_COMBOS = [

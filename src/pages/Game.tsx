@@ -7,11 +7,11 @@ export default function Game() {
   useWaitingRoom()
   const { id } = useParams()
   const {
-    gameInfo,
     status,
     boardGame,
     players,
     currentPlayer,
+    currentTurn,
     winner,
     playerHost,
     handleResetGame,
@@ -34,41 +34,45 @@ export default function Game() {
     )
   }
 
-  const TURN = gameInfo?.currentTurn
-
   return (
     <main className='w-full h-screen bg-slate-800 text-white p-8 grid place-content-center'>
       <section className='w-[740px] flex flex-col gap-8'>
-        <h1 className='text-4xl font-bold text-center'>Tic tac toe</h1>
-
-        <ul className='mx-auto max-w-[330px] grid grid-cols-3 gap-4'>
-          <GridGame
-            board={boardGame}
-            currentPlayer={currentPlayer}
-            currentTurn={TURN}
-            id={id}
-            players={players}
-            winner={winner}
-          />
-        </ul>
-
-        {winner === 'no-winner' && (
-          <div className='flex justify-center'>
-            <h3>Turno de: {currentPlayer}</h3>
-          </div>
-        )}
+        <h1 className='text-4xl font-bold text-center'>Triqui Game</h1>
 
         {winner !== 'no-winner' && winner !== 'tie' && (
           <div>
-            <h3 className='text-center'>Ganador: {winner}</h3>
+            <h3 className='text-2xl font-bold text-center'>
+              Ganador: <span className='text-lime-500'>{winner}</span>
+            </h3>
+          </div>
+        )}
+
+        {winner === 'no-winner' && (
+          <div>
+            <h3 className='text-2xl font-bold text-center'>
+              Turno de: <span className='text-yellow-500'>{currentPlayer}</span>
+            </h3>
           </div>
         )}
 
         {winner === 'tie' && (
           <div>
-            <h3 className='text-center'>Empate</h3>
+            <h3 className='text-2xl font-bold text-center'>
+              Ha habido un <span className='text-pink-500'>Empate</span>
+            </h3>
           </div>
         )}
+
+        <ul className='mx-auto max-w-[330px] grid grid-cols-3 gap-4'>
+          <GridGame
+            board={boardGame}
+            currentPlayer={currentPlayer}
+            currentTurn={currentTurn}
+            id={id}
+            players={players}
+            winner={winner}
+          />
+        </ul>
 
         {playerHost && (
           <div className='flex justify-center gap-4'>

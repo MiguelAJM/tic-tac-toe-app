@@ -1,6 +1,6 @@
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '../firebase/firebaseConfig'
-import { TURNS } from '../constats'
+import { TURN } from '../constats'
 import { useNavigate } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 import { useState } from 'react'
@@ -23,14 +23,14 @@ export default function Home() {
         gameId: UUID,
         status: 'no-running',
         playerHost: playerName,
-        currentTurn: TURNS.x,
+        currentTurn: TURN.x.turn,
         currentPlayer: playerName,
         winner: 'no-winner',
         players: [
           {
             player_name: playerName,
             isOnline: true,
-            turn: TURNS.x,
+            turn: TURN.x.turn,
             uid: UUID
           }
         ],
@@ -39,13 +39,15 @@ export default function Home() {
     } catch (error) {
       console.log(error)
     }
+    
+    toast.success('Sala creada.')
 
     localStorage.setItem('uuid', JSON.stringify(UUID))
     navigate(`/waiting-room/${UUID}`)
   }
 
   return (
-    <section className=''>
+    <section>
       <h2 className='text-4xl text-white mb-4 text-center'>Triqui Game</h2>
       <form onSubmit={createGame}>
         <input

@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Toaster } from 'sonner'
 import Home from './pages/Home'
 import InviteGame from './pages/InviteGame'
 import WaitingRoom from './pages/WaitingRoom'
-import { Toaster } from 'sonner'
 import GamesProvider from './context/GamesProvider'
 import Game from './pages/Game'
 

@@ -1,11 +1,15 @@
-import { doc, updateDoc } from 'firebase/firestore'
-import { TURNS } from '../constats'
 import { Square } from './Square'
-import { db } from '../firebase/firebaseConfig'
 import { Player } from '../utils/hooks/useDataGame'
 import { checkWinner } from '../logic/checkWinner'
-import confetti from 'canvas-confetti'
-import { checkEndGame } from '../logic/checkEndGame'
+import { getIcon } from '../utils/helpers/getSquareIcon'
+import { checkTurn } from '../logic/checkTurn'
+
+import pressSquare from '../assets/sounds/pessSquare.wav'
+import winGame from '../assets/sounds/winGame.wav'
+
+import { motion, AnimatePresence } from 'framer-motion'
+
+import useSound from 'use-sound'
 
 interface GridTypes {
   board: any[] | undefined
@@ -24,59 +28,77 @@ export default function GridGame({
   players,
   winner
 }: GridTypes) {
+  const [playPressSquare] = useSound(pressSquare)
+  const [playWinGame] = useSound(winGame)
+
+  // Obtener el UUID del usuario del LS
   const userUID = window.localStorage.getItem('uuid')
     ? JSON.parse(window.localStorage.getItem('uuid') as string)
     : ''
 
   const updateBoard = async (index: number) => {
-    if (board && id) {
-      if (board[index] || winner !== 'no-winner') return
+    try {
+      if (board && id) {
+        if (board[index] || winner !== 'no-winner') return
 
-      const newTurn = players.find((item) => item.turn === currentTurn)
-      
-      if (newTurn) {
-        if (newTurn.uid === userUID) {
-          currentTurn === TURNS.x
-            ? await updateDoc(doc(db, 'games', id), {
-                currentTurn: TURNS.o,
-                currentPlayer: players[1].player_name
-              })
-            : await updateDoc(doc(db, 'games', id), {
-                currentTurn: TURNS.x,
-                currentPlayer: players[0].player_name
-              })
-
-          const newBoard = [...board]
-          newBoard[index] = currentTurn
-
-          await updateDoc(doc(db, 'games', id), {
-            board: newBoard
-          })
-
-          const newWinner = checkWinner(newBoard)
-          const endGame = checkEndGame(newBoard)
-
-          if (newTurn.turn === newWinner) {
-            confetti()
-            return await updateDoc(doc(db, 'games', id), {
-              winner: currentPlayer
-            })
-          }
-
-          if (endGame) {
-            return await updateDoc(doc(db, 'games', id), {
-              winner: 'tie'
-            })
-          }
-        }
+        await checkTurn(
+          players,
+          currentTurn,
+          userUID,
+          id,
+          board,
+          index,
+          currentPlayer,
+          playWinGame,
+          playPressSquare
+        )
       }
+    } catch (error) {
+      console.log(error)
     }
   }
+
+  const colorComboGame = (board: any[]) => {
+    const winner = checkWinner(board)
+
+    if (winner !== 'no-winner') {
+      switch (winner) {
+        case 'x':
+          return 'bg-red-500'
+        case 'o':
+          return 'bg-blue-500'
+        default:
+          return 'bg-slate-900'
+      }
+    } else {
+      return 'bg-slate-900'
+    }
+  }
+
   return board?.map((square, index) => {
+    const SquareItem = square
+    const comboColors = colorComboGame(board)
+
+    const SquareIcon = getIcon(SquareItem)
+
     return (
-      <Square key={index} index={index} updateBoard={() => updateBoard(index)}>
-        {square}
-      </Square>
+      <AnimatePresence mode='wait'>
+        <Square
+          className={`${comboColors}`}
+          key={index}
+          index={index}
+          updateBoard={() => updateBoard(index)}
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ ease: 'easeInOut', delay: 0.5 }}
+          >
+            {SquareIcon}
+          </motion.div>
+        </Square>
+      </AnimatePresence>
     )
   })
 }

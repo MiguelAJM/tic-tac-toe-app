@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase/firebaseConfig'
 import { v4 as uuid } from 'uuid'
-import { TURNS } from '../constats'
+import { TURN } from '../constats'
 import useDataGame from '../utils/hooks/useDataGame'
 
 export default function InviteGame() {
@@ -30,13 +30,14 @@ export default function InviteGame() {
         if (status === 'success') {
           const docRef = doc(db, 'games', id)
           await updateDoc(docRef, {
+            status: 'running',
             players: [
               ...players,
               {
                 player_name: playerName,
                 isOnline: true,
                 uid: UUID,
-                turn: TURNS.o
+                turn: TURN.o.turn
               }
             ]
           })
@@ -51,7 +52,7 @@ export default function InviteGame() {
   }
 
   return (
-    <section className=''>
+    <section>
       <h2 className='text-4xl text-white mb-4 text-center'>Triqui Game</h2>
       <h3 className='text-2xl text-white mb-4 text-center'>Escoge un apodo</h3>
       <form onSubmit={joinGame}>

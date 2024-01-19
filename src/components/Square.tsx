@@ -3,10 +3,12 @@ interface SquereType {
   updateBoard?: () => void
   isSelected?: boolean
   index?: number
+  className: string
 }
 
 export const Square = ({
   children,
+  className,
   updateBoard,
   isSelected,
   index
@@ -21,7 +23,7 @@ export const Square = ({
     <li
       onClick={handleClick}
       key={index}
-      className={`${selected} select-none size-[100px] border-2 rounded-2xl text-white grid place-content-center text-4xl`}
+      className={`${selected} ${className} select-none size-[100px] border-2 rounded-2xl text-white grid place-content-center text-4xl`}
     >
       {children}
     </li>
