@@ -26,6 +26,7 @@ export default function Home() {
         currentTurn: TURN.x.turn,
         currentPlayer: playerName,
         winner: 'no-winner',
+        gameRoom: 'no-full',
         players: [
           {
             player_name: playerName,

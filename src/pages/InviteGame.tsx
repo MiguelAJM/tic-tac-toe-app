@@ -4,11 +4,12 @@ import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase/firebaseConfig'
 import { v4 as uuid } from 'uuid'
 import { TURN } from '../constats'
-import useDataGame from '../utils/hooks/useDataGame'
+import { toast } from 'sonner'
+import useData from '../utils/hooks/useData'
 
 export default function InviteGame() {
   const [playerName, setPlayerName] = useState('')
-  const { status, id, players } = useDataGame()
+  const { status, id, players } = useData()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function InviteGame() {
       localStorage.setItem('uuid', JSON.stringify(UUID))
       navigate(`/waiting-room/${id}`)
     } catch (error) {
-      console.log(error)
+      toast.error('Ha ocurrido un error.')
     }
   }
 

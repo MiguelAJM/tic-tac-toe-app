@@ -3,7 +3,7 @@ interface SquereType {
   updateBoard?: () => void
   isSelected?: boolean
   index?: number
-  className: string
+  className?: string
 }
 
 export const Square = ({

@@ -1,10 +1,10 @@
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { QRCodeSVG } from 'qrcode.react'
-import useDataGame from '../utils/hooks/useDataGame'
+import useWaitingPageData from '../utils/hooks/useWaitingPageData'
 
 export default function WaitingRoom() {
-  const { status, players, playerHost, id, handleDeleteGame, handleStartGame } =
-    useDataGame()
+  const { status, players, hostPlayer, id, handleDeleteGame, handleStartGame } =
+    useWaitingPageData()
 
   if (status === 'pending' || status === 'idle') {
     return (
@@ -43,7 +43,7 @@ export default function WaitingRoom() {
         <h2>{game.player_two_name}</h2>
       </div>
 
-      {playerHost && (
+      {hostPlayer && (
         <>
           {playerTwoOnline && (
             <button
@@ -76,7 +76,7 @@ export default function WaitingRoom() {
         </>
       )}
 
-      {!playerHost && (
+      {!hostPlayer && (
         <div>
           <h2 className='text-white text-3xl'>
             Esperando que{' '}

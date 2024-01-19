@@ -1,10 +1,8 @@
 import { useParams } from 'react-router-dom'
 import GridGame from '../components/GridGame'
-import useDataGame from '../utils/hooks/useDataGame'
-import useWaitingRoom from '../utils/hooks/useWaitingRoom'
+import useGamePageData from '../utils/hooks/useGamePageData'
 
 export default function Game() {
-  useWaitingRoom()
   const { id } = useParams()
   const {
     status,
@@ -16,7 +14,7 @@ export default function Game() {
     playerHost,
     handleResetGame,
     handleDeleteGame
-  } = useDataGame()
+  } = useGamePageData()
 
   if (status === 'pending' || status === 'idle') {
     return (

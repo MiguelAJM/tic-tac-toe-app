@@ -1,15 +1,12 @@
 import { Square } from './Square'
-import { Player } from '../utils/hooks/useDataGame'
 import { checkWinner } from '../logic/checkWinner'
 import { getIcon } from '../utils/helpers/getSquareIcon'
 import { checkTurn } from '../logic/checkTurn'
+import { Player } from '../utils/types/Games'
 
+import { Howl } from 'howler'
 import pressSquare from '../assets/sounds/pessSquare.wav'
 import winGame from '../assets/sounds/winGame.wav'
-
-import { motion, AnimatePresence } from 'framer-motion'
-
-import useSound from 'use-sound'
 
 interface GridTypes {
   board: any[] | undefined
@@ -28,8 +25,13 @@ export default function GridGame({
   players,
   winner
 }: GridTypes) {
-  const [playPressSquare] = useSound(pressSquare)
-  const [playWinGame] = useSound(winGame)
+  const soundPressSquare = new Howl({
+    src: [pressSquare]
+  })
+
+  const soundWinGame = new Howl({
+    src: [winGame]
+  })
 
   // Obtener el UUID del usuario del LS
   const userUID = window.localStorage.getItem('uuid')
@@ -49,8 +51,8 @@ export default function GridGame({
           board,
           index,
           currentPlayer,
-          playWinGame,
-          playPressSquare
+          soundPressSquare,
+          soundWinGame
         )
       }
     } catch (error) {
@@ -82,23 +84,14 @@ export default function GridGame({
     const SquareIcon = getIcon(SquareItem)
 
     return (
-      <AnimatePresence mode='wait'>
-        <Square
-          className={`${comboColors}`}
-          key={index}
-          index={index}
-          updateBoard={() => updateBoard(index)}
-        >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ ease: 'easeInOut', delay: 0.5 }}
-          >
-            {SquareIcon}
-          </motion.div>
-        </Square>
-      </AnimatePresence>
+      <Square
+        className={`${comboColors}`}
+        key={index}
+        index={index}
+        updateBoard={() => updateBoard(index)}
+      >
+        {SquareIcon}
+      </Square>
     )
   })
 }

@@ -1,4 +1,4 @@
-import { TURNS } from '../constats'
+import { TURN } from '../constats'
 import { Square } from './Square'
 
 interface TurnType {
@@ -10,8 +10,8 @@ export default function Turn({ turn }: TurnType) {
     <section className='w-[740px] mb-8'>
       <h2 className='text-4xl text-white mb-8 text-center'>Turno</h2>
       <div className='flex justify-center gap-4'>
-        <Square isSelected={turn === TURNS.x}>{TURNS.x}</Square>
-        <Square isSelected={turn === TURNS.o}>{TURNS.o}</Square>
+        <Square isSelected={turn === TURN.x.turn}>{TURN.x.turn}</Square>
+        <Square isSelected={turn === TURN.o.turn}>{TURN.o.turn}</Square>
       </div>
     </section>
   )

@@ -1,4 +1,4 @@
-import { TURNS } from '../constats'
+import { TURN } from '../constats'
 import { Square } from './Square'
 
 interface WinnerType {
@@ -17,7 +17,7 @@ export default function Winner({
   setWinner
 }: WinnerType) {
   const resetGame = () => {
-    setTurn(TURNS.x)
+    setTurn(TURN.x.turn)
     setWinner({ win: 'not-winner' })
   }
 

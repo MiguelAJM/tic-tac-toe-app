@@ -3,7 +3,7 @@ import { db } from '../firebase/firebaseConfig'
 import { TURN } from '../constats'
 import { checkWinner } from './checkWinner'
 import { checkEndGame } from './checkEndGame'
-import { Player } from '../utils/hooks/useDataGame'
+import { Player } from '../utils/types/Games'
 import confetti from 'canvas-confetti'
 
 export const checkTurn = async (
@@ -14,15 +14,14 @@ export const checkTurn = async (
   board: any,
   index: number | number,
   currentPlayer: any,
-  playWinGame: () => void,
-  playPressSquare: () => void
+  soundPressSquare: Howl,
+  soundWinGame: Howl
 ) => {
   const newTurn = players.find((item) => item.turn === currentTurn)
 
   if (newTurn && currentTurn) {
     if (newTurn.uid === userUID) {
-      playPressSquare()
-
+      soundPressSquare.play()
       currentTurn === TURN.x.turn
         ? await updateDoc(doc(db, 'games', id), {
             currentTurn: TURN.o.turn,
@@ -45,7 +44,7 @@ export const checkTurn = async (
 
       if (newTurn.turn === newWinner) {
         confetti()
-        playWinGame()
+        soundWinGame.play()
         return await updateDoc(doc(db, 'games', id), {
           winner: currentPlayer
         })
