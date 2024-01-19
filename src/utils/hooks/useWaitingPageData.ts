@@ -44,6 +44,7 @@ export default function useWaitingPageData() {
   useEffect(() => {
     if (status === 'success') {
       if (gameStatus === 'running-game') {
+        playStartGame.play()
         navigate(`/game/${id}`)
       }
     }
@@ -71,7 +72,6 @@ export default function useWaitingPageData() {
 
   async function handleStartGame() {
     if (id) {
-      playStartGame.play()
       const docRef = doc(db, 'games', id)
       await updateDoc(docRef, {
         status: 'running-game'
